@@ -9,7 +9,7 @@
 <body class="h-screen bg-slate-100 flex justify-center items-center">
     <div class="flex flex-col justify-center items-center h-96 bg-white w-80 md:w-[700px] p-4 rounded-xl">
         <h2 class="font-semibold mb-4">Chat</h2>
-        <ul id="messages" class="overflow-auto grow w-full flex flex-col gap-4">
+        <ul id="messages" class="overflow-auto grow w-full flex flex-col gap-2">
 
         </ul>
         <form id="form" class="w-full flex gap-2 mt-4">
@@ -27,18 +27,21 @@
         form.addEventListener('submit', (event)=>{
             event.preventDefault()
             const newMessage = inputNewMessage.value
+            if(newMessage.trim() === ""){
+                return
+            }
             socket.emit('new_message', newMessage)
             inputNewMessage.value = ''
-           addNewMessage(newMessage, "self-end","bg-green-100")
+           addNewMessage(newMessage, "self-end","bg-green-100", "text-green-800", "font-semibold")
         })
         socket.on('new_message', (message)=>{
-            addNewMessage(message, "self-start")
+            addNewMessage(message, "self-start", "font-semibold", "text-blue-800")
         })
 
         function addNewMessage(message, ...classes){
             const messageItem = document.createElement('li')
             messageItem.innerText = message
-            messageItem.classList.add("p-4", "bg-blue-100", "rounded-lg", ...classes)
+            messageItem.classList.add("px-4", "py-2", "bg-blue-100", "rounded-lg", ...classes)
             messagesList.appendChild(messageItem)
             messagesList.scrollTo({
                 behavior:"smooth",
