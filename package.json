@@ -1,0 +1,19 @@
+{
+  "name": "chat_app",
+  "version": "1.0.0",
+  "description": "Chat application with socket io",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon index",
+    "debug": "nodemon index --inspect"
+  },
+  "author": "Clarisa Rodríguez",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "socket.io": "^4.8.1"
+  }
+}

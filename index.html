@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="h-screen bg-slate-100 flex justify-center items-center">
+    <div class="flex flex-col justify-center items-center h-96 bg-white w-80 md:w-[700px] p-4 rounded-xl">
+        <h2 class="font-semibold mb-4">Chat</h2>
+        <ul id="messages" class="overflow-auto grow w-full flex flex-col gap-4">
+
+        </ul>
+        <form id="form" class="w-full flex gap-2 mt-4">
+            <input type="text" id="new-message" autofocus="true" class="grow border rounded-lg p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button type="submit" class="bg-blue-500 text-white py-2 px-4 font-semibold rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500">Send</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+    <script>
+        const socket = io()
+        const form = document.getElementById('form')
+        const messagesList = document.getElementById('messages')
+        const inputNewMessage = document.getElementById('new-message')
+        form.addEventListener('submit', (event)=>{
+            event.preventDefault()
+            const newMessage = inputNewMessage.value
+            socket.emit('new_message', newMessage)
+            inputNewMessage.value = ''
+           addNewMessage(newMessage, "self-end","bg-green-100")
+        })
+        socket.on('new_message', (message)=>{
+            addNewMessage(message, "self-start")
+        })
+
+        function addNewMessage(message, ...classes){
+            const messageItem = document.createElement('li')
+            messageItem.innerText = message
+            messageItem.classList.add("p-4", "bg-blue-100", "rounded-lg", ...classes)
+            messagesList.appendChild(messageItem)
+            messagesList.scrollTo({
+                behavior:"smooth",
+                top:messageItem.offsetTop,
+                left:0
+            })
+        }
+    </script>
+</body>
+</html>
